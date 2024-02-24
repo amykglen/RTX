@@ -33,7 +33,7 @@ class KG2Querier:
         self.curie_batch_size = 100
         self.plover_url = plover_url
 
-    def answer_one_hop_query(self, query_graph: QueryGraph) -> QGOrganizedKnowledgeGraph:
+    def answer_one_hop_query(self, query_graph: QueryGraph) -> Tuple[QGOrganizedKnowledgeGraph, float]:
         """
         This function answers a one-hop (single-edge) query using KG2c, via PloverDB.
         :param query_graph: A TRAPI query graph.
@@ -71,6 +71,7 @@ class KG2Querier:
         log.debug(f"Split {len(input_curies)} input curies into {len(curie_batches)} batches to send to Plover")
         log.info(f"Max edges allowed per input curie for this query is: {self.max_edges_per_input_curie}")
         batch_num = 1
+        start = time.time()
         for curie_batch in curie_batches:
             log.debug(f"Sending batch {batch_num} to Plover (has {len(curie_batch)} input curies)")
             query_graph.nodes[input_qnode_key].ids = curie_batch
@@ -95,13 +96,14 @@ class KG2Querier:
                                   f"which is too much for the system to handle. You must somehow make your query "
                                   f"smaller (specify fewer input curies or use more specific predicates/categories).",
                                   error_code="QueryTooLarge")
-                        return final_kg
+                        return final_kg, 1000
             else:
                 log.error(f"Plover returned response of {response_status}. Answer was: {plover_answer}", error_code="RequestFailed")
-                return final_kg
+                return final_kg, 1000
             batch_num += 1
-
-        return final_kg
+        
+        duration = time.time() - start
+        return final_kg, duration
 
     def answer_single_node_query(self, single_node_qg: QueryGraph) -> QGOrganizedKnowledgeGraph:
         log = self.response
