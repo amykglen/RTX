@@ -103,7 +103,8 @@ class KG2Querier:
             batch_num += 1
         
         duration = time.time() - start
-        return final_kg, duration
+        log.info(f"***ploverdbduration:{duration}")
+        return final_kg
 
     def answer_single_node_query(self, single_node_qg: QueryGraph) -> QGOrganizedKnowledgeGraph:
         log = self.response
