@@ -781,7 +781,7 @@ class ARAXExpander:
         try:
             answer_kg, ploverdb_duration = kg2_querier.answer_one_hop_query(one_hop_qg)
             # Tuck the Plover query duration onto the Response for easy access
-            log.envelope["query_duration"] = {"ploverdb": ploverdb_duration}
+            log.envelope.message["query_duration"] = {"ploverdb": ploverdb_duration}
         except Exception:
             tb = traceback.format_exc()
             error_type, error, _ = sys.exc_info()
