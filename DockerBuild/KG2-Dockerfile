@@ -31,7 +31,7 @@ RUN chmod -R 700 /home/rt/.ssh
 # clone RTX repo
 RUN mkdir -p /mnt/data/orangeboard/kg2
 RUN chown -R rt.rt /mnt/data/orangeboard/kg2
-RUN su rt && cd /mnt/data/orangeboard/kg2 && git clone https://github.com/RTXteam/RTX.git
+RUN su rt && cd /mnt/data/orangeboard/kg2 && git clone https://github.com/amykglen/RTX.git
 # 08/12/2022 NCATS change
 RUN su rt && cd /mnt/data/orangeboard/kg2/RTX && git checkout ${BUILD_BRANCH}
 RUN chown -R rt.rt /mnt/data/orangeboard/kg2/RTX
